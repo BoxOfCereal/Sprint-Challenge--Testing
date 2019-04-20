@@ -112,5 +112,19 @@ describe("the games router", () => {
       expect(res.type).toBe("application/json");
       expect(res.body).toEqual(game);
     });
+    it("should return 405 if a duplicate title is entered", async () => {
+      const game = {
+        title: "Pacman",
+        genre: "Arcade",
+        releaseYear: 1980
+      };
+      Games.addGame(game);
+      const res = await req(server)
+        .post("/api/games")
+        .send(game);
+      expect(res.status).toBe(405);
+      expect(res.type).toBe("application/json");
+      expect(res.body).toEqual({ message: " that title already exists" });
+    });
   });
 });

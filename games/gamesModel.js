@@ -2,6 +2,7 @@ let gamesList = [];
 
 function addGame(game) {
   gamesList.push(game);
+  return gamesList.find(g => g.name === game.name);
 }
 function clear() {
   gamesList = [];

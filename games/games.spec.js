@@ -72,7 +72,7 @@ describe("the games router", () => {
       expect(res.type).toBe("application/json");
       expect(res.body).toEqual(game);
     });
-    it("should return 422 for incorrect information", async () => {
+    it("should return 422 for no genre", async () => {
       const game = {
         title: "Pacman",
         releaseYear: 1980
@@ -85,6 +85,32 @@ describe("the games router", () => {
       expect(res.body).toEqual({
         messsage: "please supply the correct information for the game"
       });
+    });
+    it("should return 422 for no title", async () => {
+      const game = {
+        genre: "Arcade",
+        releaseYear: 1980
+      };
+      const res = await req(server)
+        .post("/api/games")
+        .send(game);
+      expect(res.status).toBe(422);
+      expect(res.type).toBe("application/json");
+      expect(res.body).toEqual({
+        messsage: "please supply the correct information for the game"
+      });
+    });
+    it("should return 201 without a release year", async () => {
+      const game = {
+        title: "Pacman",
+        genre: "Arcade"
+      };
+      const res = await req(server)
+        .post("/api/games")
+        .send(game);
+      expect(res.status).toBe(201);
+      expect(res.type).toBe("application/json");
+      expect(res.body).toEqual(game);
     });
   });
 });

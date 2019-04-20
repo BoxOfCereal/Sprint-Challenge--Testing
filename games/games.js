@@ -10,14 +10,16 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   const newGame = req.body;
   if (!newGame.title || !newGame.genre) {
-    res
-      .status(422)
-      .json({ messsage: "please supply the correct information for the game" });
-  } else if (!Games.addGame) {
-    res.status(405).json({ message: "that title already exists" });
+    res.status(422).json({
+      messsage: "please supply the correct information for the game"
+    });
   } else {
-    const game = Games.addGame(newGame);
-    res.status(201).json(game);
+    if (Games.doesGameExist(newGame)) {
+      res.status(405).json({ message: "that title already exists" });
+    } else {
+      const game = Games.addGame(newGame);
+      res.status(201).json(game);
+    }
   }
 });
 

@@ -4,13 +4,20 @@ const Games = require("../games/gamesModel");
 beforeEach(() => {
   Games.clear();
 });
+afterEach(() => {
+  Games.clear();
+});
 
 describe("the games router", () => {
   describe("GET /api/games", () => {
-    it("should return empty array of theres no games ", async () => {
+    it("Should return Jason data", async () => {
       const res = await req(server).get("/api/games");
       expect(res.status).toBe(200);
       expect(res.type).toBe("application/json");
+    });
+    it("should return empty array of theres no games ", async () => {
+      const res = await req(server).get("/api/games");
+      expect(res.status).toBe(200);
       expect(res.body).toEqual([]);
     });
     it("should return a single game ", async () => {
@@ -21,39 +28,11 @@ describe("the games router", () => {
       });
       const res = await req(server).get("/api/games");
       expect(res.status).toBe(200);
-      expect(res.type).toBe("application/json");
       expect(res.body).toEqual([
         {
           title: "Pacman",
           genre: "Arcade",
           releaseYear: 1980
-        }
-      ]);
-    });
-    it("should return an array of games ", async () => {
-      Games.addGame({
-        title: "Pacman",
-        genre: "Arcade",
-        releaseYear: 1980
-      });
-      Games.addGame({
-        title: "Mario",
-        genre: "Platformer",
-        releaseYear: 1989
-      });
-      const res = await req(server).get("/api/games");
-      expect(res.status).toBe(200);
-      expect(res.type).toBe("application/json");
-      expect(res.body).toEqual([
-        {
-          title: "Pacman",
-          genre: "Arcade",
-          releaseYear: 1980
-        },
-        {
-          title: "Mario",
-          genre: "Platformer",
-          releaseYear: 1989
         }
       ]);
     });
@@ -61,9 +40,9 @@ describe("the games router", () => {
   describe("POST /api/games", () => {
     it("should return an added game", async () => {
       const game = {
-        title: "Pacman",
+        title: "Pacman 2",
         genre: "Arcade",
-        releaseYear: 1980
+        releaseYear: 1981
       };
       const res = await req(server)
         .post("/api/games")
@@ -114,9 +93,9 @@ describe("the games router", () => {
     });
     it("should return 405 if a duplicate title is entered", async () => {
       const game = {
-        title: "Pacman",
-        genre: "Arcade",
-        releaseYear: 1980
+        title: "Rayman",
+        genre: "Platformer",
+        releaseYear: 2003
       };
       Games.addGame(game);
       const res = await req(server)
@@ -124,7 +103,7 @@ describe("the games router", () => {
         .send(game);
       expect(res.status).toBe(405);
       expect(res.type).toBe("application/json");
-      expect(res.body).toEqual({ message: " that title already exists" });
+      expect(res.body).toEqual({ message: "that title already exists" });
     });
   });
 });

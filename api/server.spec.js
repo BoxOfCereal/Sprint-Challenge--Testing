@@ -1,5 +1,5 @@
 const req = require("supertest");
-const server = require("../games/games");
+const server = require("../api/server");
 
 describe("the server", () => {
   describe("GET /", () => {
